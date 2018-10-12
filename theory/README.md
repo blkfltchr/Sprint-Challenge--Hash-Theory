@@ -5,13 +5,13 @@
 Find regexes that match the following. (e.g. find a single regex that matches
 both `antelope` and `antelopes`.)
 
-* Single regex that matches either of these:
+* Single regex that matches either of these: `antelope.*rock.*out`
 
     antelope rocks out
     
     antelopes rock out
 
-* Regex that matches either of:
+* Regex that matches either of: `[gm][^b]*oat`
 
     goat
     
@@ -23,7 +23,7 @@ both `antelope` and `antelopes`.)
 
 * Regex that matches dates in YYYY-MM-DD format. (Year can be 1-4 digits, and
   month and day can each be 1-2 digits). This does not need to verify the date
-  is correct (e.g 3333-33-33 can match).
+  is correct (e.g 3333-33-33 can match). `\d{1,4}-\d{1,2}-\d{1,2}`
 
   2000-10-12
   
@@ -42,12 +42,23 @@ both `antelope` and `antelopes`.)
 
       ab*c+d?[ef]
 
+```
+
++---+ ab  +---+ c  +---+ d  +---+ d  +===+ ef
+| S |--->| 0+ |--->| 1+ |--->| 0/1 |--->| either |
++---+    +---+    +---+    +---+    +===+                      
+           ε                 ε
+```
+
   Remember the ε transition can be used to move between states without
   consuming input. 
 
 * A lion can be sleeping, eating, hunting, or preening. Draw a state
   machine diagram for the lion and label the transition events that
   cause state transitions.
+
+![Lion state machine](https://ibin.co/4Ir5feR8FQBs.png "Grrrrrrr!")
+
 
 * The VT-100 terminal (console) outputs text to the screen as it
   receives it over the wire. One exception is that when it receives an
@@ -67,8 +78,18 @@ both `antelope` and `antelopes`.)
     bold sequence need only accept `1` (and is a trivial regex). (ESC is
     a single character which can be represented with `\e` in the regex.)
 
+    `ESC\[[0-9]+m?;?[0-9]*f*`
+
   * Draw a state machine diagram for a VT-100 that can consume regular
     character sequences as well as the two above ESC sequences.
+
+```
+
++---+ ESC  +---+ [0-9]  +---+ m/;  +---+ [0-9]  +===+ f
+| S |--->| 1 |--->| 1+ |--->| 0/1 |--->| 0+ |--->| 0+
++---+    +---+    +---+    +---+    +---+    +===+                      
+                                      ε        ε
+```    
 
 > If you're curious, [here are all the VT-100 escape
 > sequences](http://ascii-table.com/ansi-escape-sequences-vt-100.php).
