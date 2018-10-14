@@ -11,8 +11,10 @@ def reconstruct_trip(tickets):
   
   while current is not None:
     route.append(current)
-    if current in hash_table:
-      current = hash_table[current]
+    if current not in hash_table:
+      return []
+    current = hash_table[current]
+    
   return route
 
 if __name__ == '__main__':
